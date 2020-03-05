@@ -4,7 +4,7 @@ import com.example.challenge.model.Generation
 import com.example.challenge.model.WolframProgression
 
 class ChonkPresenter(private val listener: ViewListener) : WolframProgression.ProgressionListener {
-    private val _wolfram = WolframProgression(121)
+    private val _wolfram = WolframProgression(61)
 
     val wolfram: WolframProgression
     get() = _wolfram

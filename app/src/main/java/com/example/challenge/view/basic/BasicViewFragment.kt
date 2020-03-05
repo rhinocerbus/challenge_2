@@ -13,6 +13,8 @@ class BasicViewFragment : Fragment(R.layout.fragment_default), BasicPresenter.Vi
     private val presenter: BasicPresenter = BasicPresenter(this)
     private val adapter = BasicWolframAdapter()
 
+    private var active = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -27,12 +29,21 @@ class BasicViewFragment : Fragment(R.layout.fragment_default), BasicPresenter.Vi
 
     override fun onResume() {
         super.onResume()
-        presenter.startProgression()
+        if(active)
+            presenter.startProgression()
     }
 
     override fun onPause() {
         super.onPause()
-        presenter.pauseProgression()
+        if(active)
+            presenter.pauseProgression()
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+
+        active = isVisibleToUser
+        if(isVisibleToUser) onResume() else onPause()
     }
 
     override fun bindNewGeneration(wolfram: WolframProgression) {

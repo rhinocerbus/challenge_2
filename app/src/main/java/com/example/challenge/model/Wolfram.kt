@@ -22,16 +22,18 @@ data class WolframProgression(val capacity: Int = DEFAULT_CAPACITY) : BaseData {
     private var active = false
     private var _activeCount = 0
     val maxGenerations = ((capacity - 1) / 2.0).toInt() + 1
+    val evolveRate = EVOLVE_RATE_TARGET/maxGenerations
 
     private var listeners: ArrayList<ProgressionListener> = arrayListOf()
 
     private val _evolveDisp: Disposable by lazy {
         Observable
-            .interval(EVOLVE_RATE, EVOLVE_RATE, TimeUnit.MILLISECONDS)
+            .interval(evolveRate, evolveRate, TimeUnit.MILLISECONDS, Schedulers.io())
             .map {
                 advance()
             }
-            .backgroundToMain()
+            .take(maxGenerations.toLong())
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 for(listener in listeners) {
                     listener.onNewGenerationSpawned(this)
@@ -108,7 +110,7 @@ data class WolframProgression(val capacity: Int = DEFAULT_CAPACITY) : BaseData {
 
     companion object {
         const val DEFAULT_CAPACITY = 31
-        const val EVOLVE_RATE = 500L
+        const val EVOLVE_RATE_TARGET = 10000L
     }
 }
 
