@@ -1,4 +1,4 @@
-package com.example.challenge.view.basic
+package com.example.challenge.view.shared
 
 import android.content.Context
 import android.util.AttributeSet

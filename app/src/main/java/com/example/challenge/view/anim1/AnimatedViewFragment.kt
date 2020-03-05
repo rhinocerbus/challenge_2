@@ -1,4 +1,4 @@
-package com.example.challenge.view.basic
+package com.example.challenge.view.anim1
 
 import android.os.Bundle
 import android.view.View
@@ -10,7 +10,7 @@ import com.example.challenge.view.shared.BasicWolframAdapter
 import com.example.challenge.view.shared.BasicGridLayoutManager
 import kotlinx.android.synthetic.main.fragment_default.*
 
-class BasicViewFragment : Fragment(R.layout.fragment_default), BasicPresenter.ViewListener {
+class AnimatedViewFragment : Fragment(R.layout.fragment_default), BasicPresenter.ViewListener {
 
     private val presenter: BasicPresenter = BasicPresenter(this)
     private val adapter = BasicWolframAdapter()
@@ -27,6 +27,7 @@ class BasicViewFragment : Fragment(R.layout.fragment_default), BasicPresenter.Vi
                 requireContext(),
                 presenter.wolfram.capacity
             )
+        recycler.itemAnimator = RippleItemAnimator(presenter.wolfram.capacity)
     }
 
     override fun onResume() {

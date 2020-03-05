@@ -2,4 +2,5 @@
     <string name="app_name">Challenge</string>
     <string name="tab_basic">Basic</string>
     <string name="tab_chonk">Chonk</string>
+    <string name="tab_animated">Animated</string>
 </resources>

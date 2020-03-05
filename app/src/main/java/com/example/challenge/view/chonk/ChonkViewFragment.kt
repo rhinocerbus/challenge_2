@@ -6,13 +6,15 @@ import androidx.fragment.app.Fragment
 import com.example.challenge.R
 import com.example.challenge.model.WolframProgression
 import com.example.challenge.presenter.ChonkPresenter
+import com.example.challenge.view.shared.BasicGridLayoutManager
+import com.example.challenge.view.shared.BasicWolframAdapter
 import kotlinx.android.synthetic.main.fragment_default.*
 
 
 class ChonkViewFragment : Fragment(R.layout.fragment_default), ChonkPresenter.ViewListener {
 
     private val presenter: ChonkPresenter = ChonkPresenter(this)
-    private val adapter = ChonkWolframAdapter()
+    private val adapter = BasicWolframAdapter()
 
     private var active = false
 
@@ -22,7 +24,7 @@ class ChonkViewFragment : Fragment(R.layout.fragment_default), ChonkPresenter.Vi
         adapter.updateData(presenter.wolfram)
         recycler.adapter = adapter
         recycler.layoutManager =
-            ChonkGridLayoutManager(
+            BasicGridLayoutManager(
                 requireContext(),
                 presenter.wolfram.capacity
             )
