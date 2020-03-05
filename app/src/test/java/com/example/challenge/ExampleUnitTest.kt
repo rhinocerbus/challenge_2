@@ -31,6 +31,9 @@ class ExampleUnitTest {
 
         val wolframLarge = WolframProgression(65)
         assertEquals(33, wolframLarge.maxGenerations)
+
+        val wolframXLarge = WolframProgression(121)
+        assertEquals(61, wolframXLarge.maxGenerations)
     }
 
     @Test

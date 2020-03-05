@@ -3,8 +3,8 @@ package com.example.challenge.presenter
 import com.example.challenge.model.Generation
 import com.example.challenge.model.WolframProgression
 
-class BasicPresenter(private val listener: ViewListener) : WolframProgression.ProgressionListener {
-    private val _wolfram = WolframProgression()
+class ChonkPresenter(private val listener: ViewListener) : WolframProgression.ProgressionListener {
+    private val _wolfram = WolframProgression(121)
 
     val wolfram: WolframProgression
     get() = _wolfram

@@ -21,16 +21,24 @@ data class WolframProgression(val capacity: Int = DEFAULT_CAPACITY) : BaseData {
     private var generation = 0
     private var active = false
     private var _activeCount = 0
-    val maxGenerations = (capacity / 2.0).toInt() + 1
+    val maxGenerations = ((capacity - 1) / 2.0).toInt() + 1
 
     private var listeners: ArrayList<ProgressionListener> = arrayListOf()
 
     private val _evolveDisp: Disposable by lazy {
         Observable
             .interval(EVOLVE_RATE, EVOLVE_RATE, TimeUnit.MILLISECONDS)
+            .map {
+                advance()
+            }
             .backgroundToMain()
             .subscribe {
-                advance()
+                for(listener in listeners) {
+                    listener.onNewGenerationSpawned(this)
+                    if(active && generations.size >= maxGenerations) {
+                        pauseLife()
+                    }
+                }
             }
     }
     private var _composite = CompositeDisposable()
@@ -76,16 +84,12 @@ data class WolframProgression(val capacity: Int = DEFAULT_CAPACITY) : BaseData {
     private fun advance() {
         mutate()
         ++generation
-        if(active && generations.size >= maxGenerations) pauseLife()
     }
 
     private fun mutate() {
         val newGeneration = Generation(capacity)
         newGeneration.spawn(if(cellGenerations.size > 0) cellGenerations[cellGenerations.size - 1] else null)
         cellGenerations.add(newGeneration)
-        for(listener in listeners) {
-            listener.onNewGenerationSpawned(this)
-        }
     }
 
     @TestOnly
@@ -136,7 +140,6 @@ data class Generation(
         }
 
         val oldCells = prevGeneration._cells
-        //val activeStates = arrayListOf<Boolean>()
         for(idx in 0 until capacity) {
             //[left_cell XOR (central_cell OR right_cell)]
             val active = when(idx) {
@@ -147,17 +150,8 @@ data class Generation(
             if(active)
                 ++_activeCount
 
-            //activeStates.add(active)
             _cells[idx].updateIsActive(active)
         }
-        /*
-        //apply changes
-        for (idx in cells.indices) {
-            if (activeStates[idx] != cells[idx].active) {
-                cells[idx].updateIsActive(activeStates[idx])
-            }
-        }
-        */
     }
 }
 

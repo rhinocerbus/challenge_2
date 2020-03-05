@@ -1,4 +1,4 @@
-package com.example.challenge.view.basic
+package com.example.challenge.view.chonk
 
 import android.os.Bundle
 import android.view.View
@@ -6,12 +6,13 @@ import androidx.fragment.app.Fragment
 import com.example.challenge.R
 import com.example.challenge.model.WolframProgression
 import com.example.challenge.presenter.BasicPresenter
+import com.example.challenge.presenter.ChonkPresenter
 import kotlinx.android.synthetic.main.fragment_default.*
 
-class BasicViewFragment : Fragment(R.layout.fragment_default), BasicPresenter.ViewListener {
+class ChonkViewFragment : Fragment(R.layout.fragment_default), ChonkPresenter.ViewListener {
 
-    private val presenter: BasicPresenter = BasicPresenter(this)
-    private val adapter = BasicWolframAdapter()
+    private val presenter: ChonkPresenter = ChonkPresenter(this)
+    private val adapter = ChonkWolframAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -19,7 +20,7 @@ class BasicViewFragment : Fragment(R.layout.fragment_default), BasicPresenter.Vi
         adapter.updateData(presenter.wolfram)
         recycler.adapter = adapter
         recycler.layoutManager =
-            BasicGridLayoutManager(
+            ChonkGridLayoutManager(
                 requireContext(),
                 presenter.wolfram.capacity
             )
