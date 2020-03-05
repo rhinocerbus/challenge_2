@@ -4,7 +4,7 @@ import com.example.challenge.model.Generation
 import com.example.challenge.model.WolframProgression
 
 class DefaultPresenter(private val listener: ViewListener) : WolframProgression.ProgressionListener {
-    private val _wolfram = WolframProgression(65)
+    private val _wolfram = WolframProgression()
 
     val wolfram: WolframProgression
     get() = _wolfram
