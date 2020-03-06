@@ -16,7 +16,7 @@ abstract class AbstractWolframFragment(viewId: Int = R.layout.fragment_default) 
 
     @BindView(R.id.recycler) lateinit var recycler: RecyclerView
 
-    private var active = false
+    private var isActiveTab = false
     val presenter by lazy { buildPresenter() }
     private val adapter by lazy { buildAdapter() }
     val layoutManager by lazy {
@@ -34,21 +34,27 @@ abstract class AbstractWolframFragment(viewId: Int = R.layout.fragment_default) 
 
     override fun onResume() {
         super.onResume()
-        if(active)
+        if(isActiveTab)
             presenter.startProgression()
     }
 
     override fun onPause() {
         super.onPause()
-        if(active)
+        if(isActiveTab)
             presenter.pauseProgression()
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         super.setUserVisibleHint(isVisibleToUser)
 
-        active = isVisibleToUser
-        if(isVisibleToUser) onResume() else onPause()
+        if(isActiveTab && !isVisibleToUser) {
+            presenter.pauseProgression()
+        } else if (!isActiveTab && isVisibleToUser) {
+            presenter.startProgression()
+        }
+
+        isActiveTab = isVisibleToUser
+        //if(isVisibleToUser) onResume() else onPause()
     }
 
     open fun buildPresenter(): BasicPresenter {

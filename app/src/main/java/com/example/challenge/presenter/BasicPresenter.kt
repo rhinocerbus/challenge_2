@@ -10,6 +10,8 @@ class BasicPresenter(private val listener: ViewListener, private val capactity: 
         get() = _wolfram.capacity
     val generationCount: Int
         get() = _wolfram.generations.size
+    val progressionActive: Boolean
+        get() = _wolfram.active
     fun generationContent(idx: Int): List<Cell> = _wolfram.generations[idx].cells
 
     init {

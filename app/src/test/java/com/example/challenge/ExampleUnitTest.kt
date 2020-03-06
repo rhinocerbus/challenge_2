@@ -14,12 +14,12 @@ class ExampleUnitTest {
     @Test
     fun startIndexCorrect() {
         val wolfram = WolframProgression()
-        wolfram.initialize()
+        wolfram.reset()
         wolfram.manualAdvance()
         assertEquals(true, wolfram.generations[0].cells[15].active)
 
         val wolframLarge = WolframProgression(65)
-        wolframLarge.initialize()
+        wolframLarge.reset()
         wolframLarge.manualAdvance()
         assertEquals(true, wolframLarge.generations[0].cells[32].active)
     }
@@ -41,7 +41,7 @@ class ExampleUnitTest {
         val wolfram = WolframProgression()
         val expectedSequence = intArrayOf(1, 3, 3, 6, 4, 9, 5, 12, 7, 12, 11, 14, 12, 19, 13, 22)
 
-        wolfram.initialize()
+        wolfram.reset()
         for(idx in expectedSequence.indices) {
             wolfram.manualAdvance()
             assertEquals(expectedSequence[idx], wolfram.activeCountForGeneration(idx))
@@ -52,7 +52,7 @@ class ExampleUnitTest {
     fun negativeCapacity() {
         try {
             val wolfram = WolframProgression(-10)
-            wolfram.initialize()
+            wolfram.reset()
             wolfram.manualAdvance()
         } catch (e: Throwable) {
             //this should fail
@@ -64,7 +64,7 @@ class ExampleUnitTest {
     fun zeroCapacity() {
         try {
             val wolfram = WolframProgression(0)
-            wolfram.initialize()
+            wolfram.reset()
             wolfram.manualAdvance()
         } catch (e: Throwable) {
             //this should fail
@@ -76,7 +76,7 @@ class ExampleUnitTest {
     fun evenCapacity() {
         try {
             val wolfram = WolframProgression(10)
-            wolfram.initialize()
+            wolfram.reset()
             wolfram.manualAdvance()
         } catch (e: Throwable) {
             //this should fail
