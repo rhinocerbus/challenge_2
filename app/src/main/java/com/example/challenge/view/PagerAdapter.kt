@@ -5,15 +5,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.example.challenge.R
-import com.example.challenge.view.abstract.AbstractWolframFragment
+import com.example.challenge.view.abstracts.AbstractWolframFragment
 import com.example.challenge.view.rave.RaveViewFragment
 import com.example.challenge.view.basic.BasicViewFragment
 import com.example.challenge.view.chonk.ChonkViewFragment
 import com.example.challenge.view.fancy.FancyViewFragment
 
-class PagerAdapter(val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class PagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm) {
+
     override fun getItem(position: Int): Fragment {
-        val frag: Fragment =  when(position) {
+        val frag: AbstractWolframFragment =  when(position) {
             0 -> BasicViewFragment()
             1 -> ChonkViewFragment()
             2 -> FancyViewFragment()
