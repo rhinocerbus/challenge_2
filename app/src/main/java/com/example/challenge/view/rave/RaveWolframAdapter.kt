@@ -33,10 +33,10 @@ class RaveWolframAdapter() : BasicWolframAdapter() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when(holder) {
             is AnimatedViewHolder -> {
-                val cap = data.capacity
+                val cap = presenter.generationCapacity
                 val gen = position/cap
                 val cellIdx = (position - (gen*cap))
-                holder.bindView(data.generations[gen].cells[cellIdx])
+                holder.bindView(presenter.generationContent(gen)[cellIdx])
             }
         }
     }

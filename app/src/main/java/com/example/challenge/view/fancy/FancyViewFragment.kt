@@ -3,32 +3,42 @@ package com.example.challenge.view.fancy
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.example.challenge.R
-import com.example.challenge.model.WolframProgression
 import com.example.challenge.presenter.BasicPresenter
+import com.example.challenge.view.abstract.AbstractWolframFragment
+import com.example.challenge.view.rave.RaveWolframAdapter
 import com.example.challenge.view.shared.BasicGridLayoutManager
 import com.example.challenge.view.shared.BasicWolframAdapter
 import kotlinx.android.synthetic.main.fragment_default.*
 
 class FancyViewFragment : Fragment(R.layout.fragment_default), BasicPresenter.ViewListener {
 
-    private val presenter: BasicPresenter = BasicPresenter(this)
-    private val adapter = BasicWolframAdapter()
+    @BindView(R.id.recycler) lateinit var recycler: RecyclerView
+    private var active = false
+    lateinit var adapter: BasicWolframAdapter
     private lateinit var layoutManager: BasicGridLayoutManager
 
-    private var active = false
+    val presenter: BasicPresenter = BasicPresenter(this)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ButterKnife.bind(this, view)
 
         layoutManager =  BasicGridLayoutManager(
             requireContext(),
-            presenter.wolfram.capacity
+            presenter.generationCapacity
         )
+
+        adapter = BasicWolframAdapter()
         recycler.adapter = adapter
         recycler.layoutManager = layoutManager
-        recycler.itemAnimator = FancyItemAnimator(presenter.wolfram.capacity, layoutManager.tileSize)
-        adapter.updateData(presenter.wolfram)
+        recycler.itemAnimator = FancyItemAnimator(presenter.generationCapacity, layoutManager.tileSize)
+
+        adapter.updateData(presenter)
     }
 
     override fun onResume() {
@@ -50,7 +60,7 @@ class FancyViewFragment : Fragment(R.layout.fragment_default), BasicPresenter.Vi
         if(isVisibleToUser) onResume() else onPause()
     }
 
-    override fun bindNewGeneration(wolfram: WolframProgression) {
-        adapter.updateData(wolfram)
+    override fun bindNewGeneration(updatedPresenter: BasicPresenter) {
+        adapter.updateData(updatedPresenter)
     }
 }

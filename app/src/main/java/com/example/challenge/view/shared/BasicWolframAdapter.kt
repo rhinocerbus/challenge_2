@@ -10,27 +10,27 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import com.example.challenge.R
 import com.example.challenge.model.Cell
-import com.example.challenge.model.WolframProgression
+import com.example.challenge.presenter.BasicPresenter
 import java.lang.IllegalStateException
 
-open class BasicWolframAdapter() : RecyclerView.Adapter<BasicWolframAdapter.ViewHolder>(){
-    lateinit var data: WolframProgression
+open class BasicWolframAdapter : RecyclerView.Adapter<BasicWolframAdapter.ViewHolder>(){
+    lateinit var presenter: BasicPresenter
 
     init {
         setHasStableIds(true)
     }
 
-    fun updateData(wolfram: WolframProgression) {
-        data = wolfram
+    fun updateData(wolframPresenter: BasicPresenter) {
+        presenter = wolframPresenter
         notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
-        return data.capacity * data.generations.size
+        return presenter.generationCapacity * presenter.generationCount
     }
 
     override fun getItemId(position: Int): Long {
-        val cap = data.capacity
+        val cap = presenter.generationCapacity
         val gen = position/cap
         val cellIdx = (position - (gen*cap))
         return ((gen*1000) + cellIdx).toLong()
@@ -55,10 +55,10 @@ open class BasicWolframAdapter() : RecyclerView.Adapter<BasicWolframAdapter.View
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when(holder) {
             is BasicViewHolder -> {
-                val cap = data.capacity
+                val cap = presenter.generationCapacity
                 val gen = position/cap
                 val cellIdx = (position - (gen*cap))
-                holder.bindView(data.generations[gen].cells[cellIdx])
+                holder.bindView(presenter.generationContent(gen)[cellIdx])
             }
         }
     }

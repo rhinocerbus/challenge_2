@@ -3,31 +3,40 @@ package com.example.challenge.view.chonk
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import butterknife.BindView
+import butterknife.ButterKnife
 import com.example.challenge.R
-import com.example.challenge.model.WolframProgression
-import com.example.challenge.presenter.ChonkPresenter
+import com.example.challenge.presenter.BasicPresenter
+import com.example.challenge.view.abstract.AbstractWolframFragment
 import com.example.challenge.view.shared.BasicGridLayoutManager
 import com.example.challenge.view.shared.BasicWolframAdapter
-import kotlinx.android.synthetic.main.fragment_default.*
 
 
-class ChonkViewFragment : Fragment(R.layout.fragment_default), ChonkPresenter.ViewListener {
+class ChonkViewFragment : Fragment(R.layout.fragment_default), BasicPresenter.ViewListener {
 
-    private val presenter: ChonkPresenter = ChonkPresenter(this)
-    private val adapter = BasicWolframAdapter()
-
+    @BindView(R.id.recycler) lateinit var recycler: RecyclerView
     private var active = false
+    lateinit var adapter: BasicWolframAdapter
+    private lateinit var layoutManager: BasicGridLayoutManager
+
+    val presenter: BasicPresenter = BasicPresenter(this, 65)
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        ButterKnife.bind(this, view)
 
-        adapter.updateData(presenter.wolfram)
+        layoutManager =  BasicGridLayoutManager(
+            requireContext(),
+            presenter.generationCapacity
+        )
+
+        adapter = BasicWolframAdapter()
         recycler.adapter = adapter
-        recycler.layoutManager =
-            BasicGridLayoutManager(
-                requireContext(),
-                presenter.wolfram.capacity
-            )
+        recycler.layoutManager = layoutManager
+
+        adapter.updateData(presenter)
     }
 
     override fun onResume() {
@@ -49,7 +58,7 @@ class ChonkViewFragment : Fragment(R.layout.fragment_default), ChonkPresenter.Vi
         if(isVisibleToUser) onResume() else onPause()
     }
 
-    override fun bindNewGeneration(wolfram: WolframProgression) {
-        adapter.updateData(wolfram)
+    override fun bindNewGeneration(updatedPresenter: BasicPresenter) {
+        adapter.updateData(updatedPresenter)
     }
 }
