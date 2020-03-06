@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class BasicGridLayoutManager(context: Context, spanCount: Int) : GridLayoutManager(context, spanCount) {
-    private var tileSize: Int
+    var tileSize: Int
 
     init {
         tileSize = calculateDimensFromSpan(context, spanCount)

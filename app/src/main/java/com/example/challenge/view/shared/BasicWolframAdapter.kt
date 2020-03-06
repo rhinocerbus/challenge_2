@@ -13,7 +13,7 @@ import com.example.challenge.model.Cell
 import com.example.challenge.model.WolframProgression
 import java.lang.IllegalStateException
 
-class BasicWolframAdapter() : RecyclerView.Adapter<BasicWolframAdapter.ViewHolder>(){
+open class BasicWolframAdapter() : RecyclerView.Adapter<BasicWolframAdapter.ViewHolder>(){
     lateinit var data: WolframProgression
 
     init {
@@ -41,12 +41,10 @@ class BasicWolframAdapter() : RecyclerView.Adapter<BasicWolframAdapter.ViewHolde
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutId: Int
         return when (viewType) {
              VIEW_TYPE_CELL_BASIC -> {
-                 layoutId = R.layout.item_cell_basic
                  BasicViewHolder(
-                     LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
+                     LayoutInflater.from(parent.context).inflate(R.layout.item_cell_basic, parent, false)
                  )
              }
 
@@ -67,7 +65,7 @@ class BasicWolframAdapter() : RecyclerView.Adapter<BasicWolframAdapter.ViewHolde
 
     open class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    class BasicViewHolder(itemView: View) : ViewHolder(itemView) {
+    open class BasicViewHolder(itemView: View) : ViewHolder(itemView) {
         @BindView(R.id.root) lateinit var root: FrameLayout
         @BindView(R.id.root2) lateinit var root2: View
 
@@ -75,7 +73,7 @@ class BasicWolframAdapter() : RecyclerView.Adapter<BasicWolframAdapter.ViewHolde
             ButterKnife.bind(this, itemView)
         }
 
-        fun bindView(cell: Cell) {
+        open fun bindView(cell: Cell) {
             val colorId = if(cell.active) R.color.basicActive else R.color.basicInactive
             root2.setBackgroundColor(ResourcesCompat.getColor(root2.resources, colorId, null))
         }

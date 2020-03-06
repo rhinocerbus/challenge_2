@@ -1,21 +1,27 @@
-package com.example.challenge.view.anim1
+package com.example.challenge.view.shared
 
 import android.view.animation.AlphaAnimation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 
-class RippleItemAnimator(val spanCount: Int) : SimpleItemAnimator() {
+open class RippleItemAnimator(val spanCount: Int) : SimpleItemAnimator() {
 
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        val pos = holder.adapterPosition
-        val row = (pos / spanCount).toInt()
-        val column = pos - (row*spanCount)
+    fun buildFadeAnimation(position: Int): AlphaAnimation {
+        val row = (position / spanCount).toInt()
+        val column = position - (row*spanCount)
         val center = spanCount / 2
         val colOffset = Math.abs(center - column)
+
         val anim = AlphaAnimation(0f, 1f)
         anim.duration = 500
         anim.startOffset = colOffset * 100L
-        holder.itemView.startAnimation(anim)
+        return anim
+    }
+
+    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
+        val pos = holder.adapterPosition
+        val animation = buildFadeAnimation(pos)
+        holder.itemView.startAnimation(animation)
         return true
     }
 

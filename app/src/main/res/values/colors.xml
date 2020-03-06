@@ -5,5 +5,5 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="basicActive">#000000</color>
-    <color name="basicInactive">#FFFFFF</color>
+    <color name="basicInactive">#00FFFFFF</color>
 </resources>
