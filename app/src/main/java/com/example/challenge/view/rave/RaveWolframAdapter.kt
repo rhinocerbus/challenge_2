@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import com.example.challenge.R
 import com.example.challenge.model.Cell
+import com.example.challenge.presenter.BasicPresenter
 import com.example.challenge.view.shared.BasicWolframAdapter
 import java.lang.IllegalStateException
 
 
-class RaveWolframAdapter() : BasicWolframAdapter() {
+class RaveWolframAdapter(presenter: BasicPresenter) : BasicWolframAdapter(presenter) {
 
     override fun getItemViewType(position: Int): Int {
         return VIEW_TYPE_ANIMATED
@@ -46,50 +47,48 @@ class RaveWolframAdapter() : BasicWolframAdapter() {
     }
 
     class AnimatedViewHolder(itemView: View) : BasicWolframAdapter.BasicViewHolder(itemView) {
-        var animation: ValueAnimator = ValueAnimator.ofFloat(0f, 1f)
-        var animation2: ValueAnimator = ValueAnimator.ofFloat(1f, 0f)
-        var isAnimating = false
+        var colorAnim: ValueAnimator = ValueAnimator.ofFloat(0f, 1f)
+        var invertedColorAnim: ValueAnimator = ValueAnimator.ofFloat(1f, 0f)
 
         init {
-            animation.duration = 2000
+            colorAnim.duration = 2000
 
             var runColor: Int
-            val hue = 0
-            val hsv: FloatArray = FloatArray(3) // Transition color
+            val hsv = FloatArray(3)
 
             hsv[1] = 1.0f
             hsv[2] = 1.0f
-            animation.addUpdateListener { animation ->
+            colorAnim.addUpdateListener { animation ->
                 hsv[0] = 360 * animation.animatedFraction
                 runColor = Color.HSVToColor(hsv)
                 root2.setBackgroundColor(runColor)
             }
-            animation.repeatCount = Animation.INFINITE
+            colorAnim.repeatCount = Animation.INFINITE
 
-            animation2.duration = 2000
+            invertedColorAnim.duration = 2000
 
             hsv[1] = 1.0f
             hsv[2] = 1.0f
-            animation2.addUpdateListener { animation ->
+            invertedColorAnim.addUpdateListener { animation ->
                 hsv[0] = 360 - (360 * animation.animatedFraction)
                 runColor = Color.HSVToColor(hsv)
                 root2.setBackgroundColor(runColor)
             }
-            animation2.repeatCount = Animation.INFINITE
+            invertedColorAnim.repeatCount = Animation.INFINITE
         }
 
         override fun bindView(cell: Cell) {
             super.bindView(cell)
 
             if(cell.active) {
-                if(!animation.isRunning) {
-                    animation.start()
-                    animation2.pause()
+                if(!colorAnim.isRunning) {
+                    colorAnim.start()
+                    invertedColorAnim.pause()
                 }
             } else {
-                if(!animation2.isRunning) {
-                    animation2.start()
-                    animation.pause()
+                if(!invertedColorAnim.isRunning) {
+                    invertedColorAnim.start()
+                    colorAnim.pause()
                 }
             }
         }

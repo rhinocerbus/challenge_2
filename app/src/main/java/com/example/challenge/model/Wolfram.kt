@@ -1,6 +1,7 @@
 package com.example.challenge.model
 
 import com.example.challenge.model.WolframProgression.Companion.DEFAULT_CAPACITY
+import com.example.challenge.util.backgroundToMain
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -19,16 +20,6 @@ data class WolframProgression(val capacity: Int = DEFAULT_CAPACITY) : BaseData {
         private set
 
     private val evolveRate = EVOLVE_RATE_TARGET / maxGenerations
-    private val _evolveObs: Observable<Boolean> =
-        Observable
-            .interval(evolveRate, evolveRate, TimeUnit.MILLISECONDS, Schedulers.io())
-            .map {
-                advance()
-                true
-            }
-            .take(maxGenerations.toLong())
-            .observeOn(AndroidSchedulers.mainThread())
-
     private var _composite = CompositeDisposable()
 
     val activeCount: Int
@@ -60,11 +51,12 @@ data class WolframProgression(val capacity: Int = DEFAULT_CAPACITY) : BaseData {
     }
 
     fun startLife() {
-        if (!active) {
+        if (!active && generations.size < maxGenerations) {
             active = true
             _composite = CompositeDisposable()
             _composite.add(
-                _evolveObs.subscribe {
+                buildEvolveObservable()
+                    .subscribe {
                     for (listener in listeners) {
                         listener.onNewGenerationSpawned(this)
                         if (active && generations.size >= maxGenerations) {
@@ -81,6 +73,17 @@ data class WolframProgression(val capacity: Int = DEFAULT_CAPACITY) : BaseData {
             active = false
             _composite.dispose()
         }
+    }
+
+    private fun buildEvolveObservable(): Observable<Boolean> {
+        return Observable
+            .interval(evolveRate, evolveRate, TimeUnit.MILLISECONDS, Schedulers.io())
+            .map {
+                advance()
+                true
+            }
+            .take((maxGenerations - generations.size).toLong())
+            .backgroundToMain()
     }
 
     private fun advance() {

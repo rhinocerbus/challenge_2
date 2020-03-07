@@ -16,6 +16,6 @@ class RaveViewFragment : AbstractWolframFragment() {
     }
 
     override fun buildAdapter(): BasicWolframAdapter {
-        return RaveWolframAdapter()
+        return RaveWolframAdapter(presenter)
     }
 }

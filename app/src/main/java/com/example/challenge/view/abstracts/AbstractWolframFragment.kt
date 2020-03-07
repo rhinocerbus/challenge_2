@@ -12,7 +12,7 @@ import com.example.challenge.presenter.BasicPresenter
 import com.example.challenge.view.shared.BasicGridLayoutManager
 import com.example.challenge.view.shared.BasicWolframAdapter
 
-abstract class AbstractWolframFragment(viewId: Int = R.layout.fragment_default) : Fragment(viewId), BasicPresenter.ViewListener {
+abstract class AbstractWolframFragment(viewId: Int = R.layout.fragment_default) : Fragment(viewId), BasicPresenter.WolframProgressionListener {
 
     @BindView(R.id.recycler) lateinit var recycler: RecyclerView
 
@@ -27,7 +27,6 @@ abstract class AbstractWolframFragment(viewId: Int = R.layout.fragment_default) 
         super.onViewCreated(view, savedInstanceState)
         ButterKnife.bind(this, view)
 
-        adapter.updateData(presenter)
         recycler.adapter = adapter
         recycler.layoutManager = layoutManager
     }
@@ -62,10 +61,10 @@ abstract class AbstractWolframFragment(viewId: Int = R.layout.fragment_default) 
     }
 
     open fun buildAdapter(): BasicWolframAdapter {
-        return BasicWolframAdapter()
+        return BasicWolframAdapter(presenter)
     }
 
-    override fun bindNewGeneration(updatedPresenter: BasicPresenter) {
-        adapter.updateData(updatedPresenter)
+    override fun bindNewGeneration() {
+        adapter.updateData()
     }
 }

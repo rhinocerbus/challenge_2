@@ -11,17 +11,14 @@ import butterknife.ButterKnife
 import com.example.challenge.R
 import com.example.challenge.model.Cell
 import com.example.challenge.presenter.BasicPresenter
-import java.lang.IllegalStateException
 
-open class BasicWolframAdapter : RecyclerView.Adapter<BasicWolframAdapter.ViewHolder>(){
-    lateinit var presenter: BasicPresenter
+open class BasicWolframAdapter(val presenter: BasicPresenter) : RecyclerView.Adapter<BasicWolframAdapter.ViewHolder>(){
 
     init {
         setHasStableIds(true)
     }
 
-    fun updateData(wolframPresenter: BasicPresenter) {
-        presenter = wolframPresenter
+    fun updateData() {
         notifyDataSetChanged()
     }
 
