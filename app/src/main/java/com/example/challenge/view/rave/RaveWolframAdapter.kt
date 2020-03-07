@@ -61,7 +61,7 @@ class RaveWolframAdapter(presenter: BasicPresenter) : BasicWolframAdapter(presen
             colorAnim.addUpdateListener { animation ->
                 hsv[0] = 360 * animation.animatedFraction
                 runColor = Color.HSVToColor(hsv)
-                root2.setBackgroundColor(runColor)
+                root.setBackgroundColor(runColor)
             }
             colorAnim.repeatCount = Animation.INFINITE
 
@@ -72,7 +72,7 @@ class RaveWolframAdapter(presenter: BasicPresenter) : BasicWolframAdapter(presen
             invertedColorAnim.addUpdateListener { animation ->
                 hsv[0] = 360 - (360 * animation.animatedFraction)
                 runColor = Color.HSVToColor(hsv)
-                root2.setBackgroundColor(runColor)
+                root.setBackgroundColor(runColor)
             }
             invertedColorAnim.repeatCount = Animation.INFINITE
         }

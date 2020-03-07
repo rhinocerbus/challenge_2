@@ -64,7 +64,6 @@ open class BasicWolframAdapter(val presenter: BasicPresenter) : RecyclerView.Ada
 
     open class BasicViewHolder(itemView: View) : ViewHolder(itemView) {
         @BindView(R.id.root) lateinit var root: FrameLayout
-        @BindView(R.id.root2) lateinit var root2: View
 
         init {
             ButterKnife.bind(this, itemView)
@@ -72,7 +71,7 @@ open class BasicWolframAdapter(val presenter: BasicPresenter) : RecyclerView.Ada
 
         open fun bindView(cell: Cell) {
             val colorId = if(cell.active) R.color.basicActive else R.color.basicInactive
-            root2.setBackgroundColor(ResourcesCompat.getColor(root2.resources, colorId, null))
+            root.setBackgroundColor(ResourcesCompat.getColor(root.resources, colorId, null))
         }
     }
 
